@@ -1,0 +1,2 @@
+rm HCftoOg.json HCbtoOg.json back.json front.json
+ln -s $1_back.json back.json && ln -s $1_front.json front.json && ln -s $1_HCtoO_back.json HCbtoOg.json && ln -s $1_HCtoO_front.json HCftoOg.json

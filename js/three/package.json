@@ -1,0 +1,164 @@
+{
+  "_args": [
+    [
+      "three",
+      "/home/deval/Code/edusense/js_website"
+    ]
+  ],
+  "_from": "three@latest",
+  "_hasShrinkwrap": false,
+  "_id": "three@0.115.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/three",
+  "_nodeVersion": "10.15.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/three_0.115.0_1585145539081_0.3490844466127474"
+  },
+  "_npmUser": {
+    "email": "info@mrdoob.com",
+    "name": "mrdoob"
+  },
+  "_npmVersion": "6.9.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "three",
+    "raw": "three",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/three/-/three-0.115.0.tgz",
+  "_shasum": "540d800c381b9da2334c024f0fbe4d23f84eb05e",
+  "_shrinkwrap": null,
+  "_spec": "three",
+  "_where": "/home/deval/Code/edusense/js_website",
+  "author": {
+    "name": "mrdoob"
+  },
+  "bugs": {
+    "url": "https://github.com/mrdoob/three.js/issues"
+  },
+  "dependencies": {},
+  "description": "JavaScript 3D library",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "concurrently": "^5.0.2",
+    "cross-env": "^7.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-mdcs": "^4.2.3",
+    "eslint-plugin-html": "^6.0.0",
+    "failonlyreporter": "^1.0.0",
+    "google-closure-compiler": "20200224.0.0",
+    "http-server": "^0.12.1",
+    "image-output": "2.4.1",
+    "pixelmatch": "5.1.0",
+    "pngjs": "3.4.0",
+    "puppeteer": "^2.1.1",
+    "qunit": "^2.9.3",
+    "rollup": "^2.0.5",
+    "rollup-plugin-buble": "^0.19.8",
+    "serve-handler": "^6.1.2",
+    "typescript": "^3.8.3"
+  },
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "dist": {
+    "fileCount": 1510,
+    "integrity": "sha512-mAV2Ky3RdcbdSbR9capI+tKLvRldWYxd4151PZTT/o7+U2jh9Is3a4KmnYwzyUAhB2ZA3pXSgCd2DOY4Tj5kow==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJee2bDCRA9TVsSAnZWagAAPPkP/jIb4WVAXUWK6heqWvdG\ncnQO6VocU1PaBRcRUJnxw4BCI/iBZwGnqgXb0BeEu8D9tLNS++ADo8G2J6k/\nY5pgPYrqAcO1ABv9ikkoHbP5zS5pr62skuvcFWmVwsd4fMq4OmBOU+9vhc0N\nbdf89MhKMd2yn5bjG7f3l7rMarCz7WSxDlpy4kNfsnyIVmg6nr8hO0tPapG6\nkp3RrpQydnEFzWfI9boY9s7gugtk2Kzd/vXGHryzFrJUS5Fx5LWRyxoXFyby\nipzfVnZV4M7r+QlZluL6KvZGGzFah0i+Y1LDy1Eg2w97iSwQfv9qXi3HiWh2\nBJa+HdG9/9fwwptr5k458BYwz3cVXl0qqdZhNAuRclUKVV+N/cZovFM1pC7b\n80R19dKMphUJ8Nym1ZX+ksbhxLDVGm9zTpSGBjIR3P9NHhPYmEqM05V595QU\n6eYgfT0/6A5rVieNsnvoSfaXBpw/DfuDJT4uHWNqJ7fHwjxHwBYu5vLn8hpg\nlbf0aN1Za4zpvGiGezt43SNASQrZ02takVRkYfKOttcyVDrUORCG4RAzJ4zb\nDHyNETmUmC/fM52whKqSTi+tJ80bh7dCL0YcAznjhjRHQBRy0bzh1BcfwDX1\nakx0Wg+d7U8GpQANS8nIidi0rDP3+KAfZEr/p17AKHrvvG9aqllK/LNQJ2cQ\njRIE\r\n=8/Sp\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "540d800c381b9da2334c024f0fbe4d23f84eb05e",
+    "tarball": "https://registry.npmjs.org/three/-/three-0.115.0.tgz",
+    "unpackedSize": 21392073
+  },
+  "eslintConfig": {
+    "extends": "mdcs",
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "html"
+    ],
+    "rules": {
+      "@typescript-eslint/indent": [
+        {
+          "SwitchCase": 1
+        },
+        "error",
+        "tab"
+      ],
+      "@typescript-eslint/no-unused-vars": 1
+    }
+  },
+  "gitHead": "7c1424c5819ab622a346dd630ee4e6431388021e",
+  "homepage": "https://threejs.org/",
+  "jspm": {
+    "directories": {},
+    "files": [
+      "LICENSE",
+      "README.md",
+      "build/three.js",
+      "build/three.min.js",
+      "build/three.module.js",
+      "package.json"
+    ]
+  },
+  "keywords": [
+    "3d",
+    "canvas",
+    "svg",
+    "three",
+    "three.js",
+    "webgl"
+  ],
+  "license": "MIT",
+  "main": "build/three.js",
+  "maintainers": [
+    {
+      "name": "bhouston",
+      "email": "ben@exocortex.com"
+    },
+    {
+      "name": "cabbibo",
+      "email": "isaaclandoncohen@gmail.com"
+    },
+    {
+      "name": "mrdoob",
+      "email": "info@mrdoob.com"
+    }
+  ],
+  "module": "build/three.module.js",
+  "name": "three",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrdoob/three.js.git"
+  },
+  "scripts": {
+    "build": "rollup -c utils/build/rollup.config.js",
+    "build-closure": "rollup -c utils/build/rollup.config.js && google-closure-compiler --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs utils/build/externs.js --language_in=ECMASCRIPT5_STRICT --js build/three.js --js_output_file build/three.min.js",
+    "build-examples": "rollup -c utils/build/rollup-examples.config.js",
+    "build-test": "rollup -c test/rollup.unit.config.js",
+    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c utils/build/rollup.config.js -w -m inline\" \"http-server -c-1 -p 8080\"",
+    "dev-test": "concurrently --names \"ROLLUP,ROLLUPTEST,HTTP\" -c \"bgBlue.bold,bgRed.bold,bgGreen.bold\" \"rollup -c utils/build/rollup.config.js -w -m inline\" \"rollup -c test/rollup.unit.config.js -w -m inline\" \"http-server -p 8080\"",
+    "make-screenshot": "cross-env MAKE=true npm run test-e2e",
+    "start": "npm run dev",
+    "test": "npm run test-lint && npm run test-unit",
+    "test-e2e": "node --expose-gc test/e2e/puppeteer.js",
+    "test-lint": "eslint src --ext js --ext ts && tsc -p utils/build/tsconfig.lint.json",
+    "test-lint-examples": "eslint examples/jsm --ext js --ext ts --ignore-pattern libs && tsc -p utils/build/tsconfig-examples.lint.json",
+    "test-unit": "npm run build-test && qunit -r failonlyreporter test/unit/three.source.unit.js"
+  },
+  "types": "src/Three.d.ts",
+  "version": "0.115.0"
+}
