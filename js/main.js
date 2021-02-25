@@ -15,9 +15,13 @@ import { VRButton } from './three/examples/jsm/webxr/VRButton.js';
 import { Person, Person1 } from "./person.js"
 import { CameraModel, CameraModel1,  CameraModel2, Wall, WallBack, WallNew } from './sceneObjects.js';
 
-// Import Config
-import { instJsonPath, studJsonPath, classScenePath, backCamTransformPath, 
-            frontCamTransformPath, modelPath, backWallTransformPath, frontWallTransformPath, backTransformPath, frontTransformPath} from "./config.js";
+var url = ""
+var modelPath = 'models/student_head.fbx';
+var frontCamTransformPath = url + "Hjsons/HCftoOg.json"
+var backCamTransformPath =  url + "Hjsons/HCbtoOg.json"
+var classScenePath = url + "Hjsons/back.json"
+var backTransformPath = url + "Hjsons/back.json"
+var frontTransformPath = url + "Hjsons/front.json"
 
 // import { Math } from 'mathjs';
 // import { fs } from 'file-system';
@@ -32,7 +36,6 @@ var mainCam, controls, scene, renderer, stats, gui_controls;
 var podium;
 var whiteboard1, whiteboard2 ;
 var screen1, screen2;
-var arucoMap = {};
 var heatMapPlane, heatMapInst;
 var currFrameId = 1450, maxFrames = 9000;
 var instructor = [], instructorData, maxInsts = 60;
@@ -71,7 +74,7 @@ var params = {
 var backClipPlane, frontClipPlane, rightClipPlane, leftClipPlane, downClipPlane, upClipPlane;
 
 var class_params = {
-    Course:"1", 
+    Classroom:"1", 
     Semester:"1",
     Date: "1"
 }
@@ -141,7 +144,13 @@ function loadModel() {
 }
 
 loadModel().then(function (model) {
-    init(model);
+    try{
+        init(model);
+    }
+    catch(err){
+        console.log(err);
+    }
+
     animate();
 }, function () { console.log("Model Loading Failed") })
 
@@ -279,10 +288,10 @@ function init(dummyModel) {
 
     // Add Left Wall
     
-    // left_wall = new WallNew(frontTransformPath, 0xdbd9d9, "left", 20, wall_height)
-    // scene.add(left_wall.wall);
-    // scene.add(left_wall.sphere);
-    // frontCamGroup.camGroup.add(left_wall.sphere) 
+    left_wall = new WallNew(frontTransformPath, 0xdbd9d9, "left", 20, wall_height)
+    scene.add(left_wall.wall);
+    scene.add(left_wall.sphere);
+    frontCamGroup.camGroup.add(left_wall.sphere) 
 
     // left_wall = new WallNew(backTransformPath, 0xdbd9d9, "left", 20, wall_height)
     // scene.add(left_wall.wall);
@@ -292,10 +301,10 @@ function init(dummyModel) {
     
     // Add Right Wall
 
-    // right_wall = new WallNew(backTransformPath, 0xdbd9d9, "right", 20, wall_height)
-    // scene.add(right_wall.wall);
-    // scene.add(right_wall.sphere);
-    // backCamGroup.camGroup.add(right_wall.sphere)        
+    right_wall = new WallNew(backTransformPath, 0xdbd9d9, "right", 20, wall_height)
+    scene.add(right_wall.wall);
+    scene.add(right_wall.sphere);
+    backCamGroup.camGroup.add(right_wall.sphere)        
 
     // right_wall = new WallNew(frontTransformPath, 0xdbd9d9, "right", 20, wall_height)
     // scene.add(right_wall.wall);
@@ -312,12 +321,22 @@ function init(dummyModel) {
     downClipPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), Math.abs(z_shift));
     upClipPlane = new THREE.Plane( new THREE.Vector3( 0, 0, -1 ), 4 + z_shift);
     
-    // left_wall.wall.material.clippingPlanes = [backClipPlane, frontClipPlane, upClipPlane, downClipPlane];
-    // right_wall.wall.material.clippingPlanes = [backClipPlane, frontClipPlane, upClipPlane, downClipPlane];
-    front_wall.wall.material.clippingPlanes = [leftClipPlane, rightClipPlane, upClipPlane, downClipPlane];
-    back_wall.wall.material.clippingPlanes = [leftClipPlane, rightClipPlane, upClipPlane, downClipPlane];
-    ground.material.clippingPlanes = [leftClipPlane, rightClipPlane, frontClipPlane, backClipPlane]
+    left_wall.wall.material.clippingPlanes = [backClipPlane, frontClipPlane, upClipPlane, downClipPlane];
+    right_wall.wall.material.clippingPlanes = [backClipPlane, frontClipPlane, upClipPlane, downClipPlane];
     
+    front_wall.wall.material.clippingPlanes = [upClipPlane, downClipPlane];
+    back_wall.wall.material.clippingPlanes = [upClipPlane, downClipPlane];
+    
+    ground.material.clippingPlanes = [frontClipPlane, backClipPlane]
+    
+    front_wall.wall.material.clippingPlanes.push(leftClipPlane)
+    back_wall.wall.material.clippingPlanes.push(leftClipPlane)
+    ground.material.clippingPlanes.push(leftClipPlane)
+
+    front_wall.wall.material.clippingPlanes.push(rightClipPlane)
+    back_wall.wall.material.clippingPlanes.push(rightClipPlane)
+    ground.material.clippingPlanes.push(rightClipPlane)
+   
     
     // Add instructor 
     // Add People from instructor view
@@ -364,7 +383,8 @@ function init(dummyModel) {
     }
 
     // Read Frame Data
-    readFramesJSON()
+    readFramesJSON("407SC_104")
+    updateClass(classScenePath)
 
     var sphereGeometry = new THREE.SphereBufferGeometry(0.1, 32, 32);
     var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
@@ -575,8 +595,8 @@ function init(dummyModel) {
             tvec_conf = v;
             params.isUpdateCharacters = true;
         },
-
-        Course: "11-785",
+        
+        Classroom: "407SC_104",
         Semester: "Fall 2020",
         Date: "1-Sept",
 
@@ -603,7 +623,32 @@ function init(dummyModel) {
 
     };
 
-    gui.add(gui_controls, 'Course', [ "11-785", "10-703", "10-701" ] );
+    gui.add(gui_controls, 'Classroom', [ "407SC_104", "DH_1209", "PH_A18C", "PH_A20A", "PH_A21A" ] )
+        .listen().onChange(function(className){
+            
+            console.log(className)
+            backCamGroup.update_class(url+"Hjsons/" + className + "_HCtoO_back.json")
+            frontCamGroup.update_class(url+"Hjsons/" + className + "_HCtoO_front.json")
+            
+            back_wall.update_class(url+"Hjsons/" + className + "_front.json")
+            front_wall.update_class(url+"Hjsons/" + className + "_back.json")
+            
+            if (right_wall){
+                right_wall.update_class(url+"Hjsons/" + className + "_back.json")    
+            }
+
+            if (left_wall){
+                left_wall.update_class(url+"Hjsons/" + className + "_front.json")
+            }
+                        
+            updateClass(url+"Hjsons/" + className + "_back.json")
+            params.isNotSceneSetup = true;
+            tries = 0;
+
+            readFramesJSON(className)
+            
+        });
+
     gui.add(gui_controls, "Semester", [ "Fall 2020", "Summer 2020", "Spring 2020" ] );
     gui.add(gui_controls, "Date", [ "1-Sept", "3-Sept", "8-Sept", "10-Sept" ] );
 
@@ -1015,13 +1060,22 @@ function setupScene() {
 
 }
 
-function readFramesJSON() {
+function readFramesJSON(className) {
+    
+    var instJsonPath = url + "frame_data/" + className + "_instructor.json";
+    var studJsonPath = url + "frame_data/" + className + "_students.json";
+
     $.getJSON(instJsonPath, {
         format: "json"
     }, function () { console.log("Read Instructor Json Complete"); })
         .done(function (data) {
             instructorData = data
             params.isUpdateCharacters = true;
+        })
+        .fail(function() {
+            for (var i = 0; i < maxInsts; i++) {
+                instructor[i].setVisible(false);
+            }
         });
 
     $.getJSON(studJsonPath, {
@@ -1031,15 +1085,24 @@ function readFramesJSON() {
             studentData = data
             params.isUpdateCharacters = true;
             // console.log(studentData)
+        })
+        .fail(function() {
+            for (var i = 0; i < maxStudents; i++) {
+                students[i].setVisible(false);
+            }
         });
 
-        $.getJSON(classScenePath, {
-            format: "json"
-        }, function () { console.log("Read Class Scene Json Complete"); })
-            .done(function (data) {
-                classData = data
-                // console.log(classData)
-            });
+}
+
+function updateClass(classScenePath){
+    $.getJSON(classScenePath, {
+        format: "json"
+    }, function () { console.log("Read Class Scene Json Complete"); })
+    .done(function (data) {
+        classData = data
+        // console.log(classData)
+        setupSceneObjects()
+    });
 }
 
 function onDocumentMouseMove(event) {
@@ -1350,7 +1413,180 @@ function get_time(frameID){
     var date = new Date(null);
     date.setSeconds((frameID * 20)/fps); // specify value for SECONDS here
     var result = date.toISOString().substr(11, 8);
-    return result
+    return result;
+}
+
+function setupSceneObjects(){
+    
+    var point_gt = new THREE.Vector3();
+    var point_gt2 = new THREE.Vector3();
+    var arucoMap = {};
+
+    tries += 1
+    if(tries >= 10){
+        params.isNotSceneSetup = false;
+        tries = 0
+    }
+    
+    try{
+
+        for (var i = 0; i < classData.length; i++) {    
+            arucoMap[classData[i]["id"]] = i;
+            arucoMarkers[i].visible = false
+        } 
+    }
+    catch(error){
+
+    }
+
+    try {
+        
+        // Podium 
+        var index = arucoMap[18]
+        var transSphere = classData[index]["translation"];
+        arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
+        arucoMarkers[index].getWorldPosition(point_gt);
+        podium.position.set(point_gt.x, point_gt.y, z_shift)
+
+        podium_plane.position.set(point_gt.x, point_gt.y, 0.6)
+        podium_plane.position.y += 0.3
+        // console.log("Podium", point_gt)
+        podium.visible = true;
+
+    } catch (error) {
+        if (podium) {
+            podium.visible = false;
+        }
+    }
+
+    try {
+        // Whiteboard 1 
+        var index = arucoMap[10]
+        var transSphere = classData[index]["translation"];
+        arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
+        
+        var index2 = arucoMap[11]
+        var transSphere = classData[index2]["translation"];
+        arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
+        
+        var wb1 = new THREE.Vector3();
+        arucoMarkers[index].getWorldPosition(point_gt);
+        // console.log("WB1 1", point_gt)
+        arucoMarkers[index2].getWorldPosition(point_gt2);
+        // console.log("WB1 2", point_gt2)
+        wb1.x = (point_gt.x + point_gt2.x) /2;
+        wb1.y = (point_gt.y + point_gt2.y) /2;
+        wb1.z = (point_gt.z + point_gt2.z) /2;
+        whiteboard1.position.set(wb1.x, wb1.y, wb1.z - 1 + 0.3) 
+        var scale_x = (Math.abs(point_gt2.x - point_gt.x) + 0.5 ) / (6 * 100) 
+        var scale_y = (Math.abs(point_gt2.z - point_gt.z) + 0.5 ) / (1.5 * 100) 
+        whiteboard1.scale.set(scale_x, scale_y, 0.01)
+        wb1_plane.position.set(wb1.x, wb1.y, wb1.z)
+        wb1_plane.position.y += 0.1
+
+        whiteboard1.visible = true;
+        
+    } catch (error) {
+        if (whiteboard1) {
+            whiteboard1.visible = false;
+        }
+    }
+    
+    try {
+        // Whiteboard 2
+        var index = arucoMap[12]
+        var transSphere = classData[index]["translation"];
+        arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
+        
+        var index2 = arucoMap[13]
+        var transSphere = classData[index2]["translation"];
+        arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
+        
+        var wb1 = new THREE.Vector3();
+        arucoMarkers[index].getWorldPosition(point_gt);
+        // console.log("WB2 1", point_gt)
+        arucoMarkers[index2].getWorldPosition(point_gt2);
+        // console.log("WB2 2", point_gt2)
+
+        wb1.x = (point_gt.x + point_gt2.x) /2;
+        wb1.y = (point_gt.y + point_gt2.y) /2;
+        wb1.z = (point_gt.z + point_gt2.z) /2;
+        whiteboard2.position.set(wb1.x, wb1.y, wb1.z - 1 + 0.3)
+
+        var scale_x = (Math.abs(point_gt2.x - point_gt.x) + 0.5 ) / (6 * 100) 
+        var scale_y = (Math.abs(point_gt2.z - point_gt.z) + 0.5 ) / (1.5 * 100) 
+        whiteboard2.scale.set(scale_x, scale_y, 0.01)
+        wb2_plane.position.set(wb1.x, wb1.y, wb1.z)
+        wb2_plane.position.y += 0.1
+        
+        whiteboard2.visible = true;
+        
+    } catch (error) {
+        if (whiteboard2) {
+            whiteboard2.visible = false;
+        }
+    }
+
+    try {
+        // Screen 1
+        var index = arucoMap[14]
+        var transSphere = classData[index]["translation"];
+        arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
+        
+        var index2 = arucoMap[15]
+        var transSphere = classData[index2]["translation"];
+        arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
+
+        var wb1 = new THREE.Vector3();
+        arucoMarkers[index].getWorldPosition(point_gt);
+        // console.log("SC1 1", point_gt)
+        arucoMarkers[index2].getWorldPosition(point_gt2);
+        // console.log("SC1 2", point_gt2)
+        wb1.x = (point_gt.x + point_gt2.x) /2;
+        wb1.y = (point_gt.y + point_gt2.y) /2;
+        wb1.z = (point_gt.z + point_gt2.z) /2;
+        screen1.position.set(wb1.x -1.75, wb1.y -2.25, wb1.z + 5.1 + 0.2)            
+        sc1_plane.position.set(wb1.x, wb1.y, wb1.z)
+        sc1_plane.position.y += 0.1
+        screen1.visible = true;
+        
+    } catch (error) {
+        if (screen1){
+            screen1.visible = false;
+        }
+    }
+
+    try {
+        
+        // Screen 2
+        var index = arucoMap[16]
+        var transSphere = classData[index]["translation"];
+        arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
+        
+        var index2 = arucoMap[17]
+        var transSphere = classData[index2]["translation"];
+        arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
+
+        var wb1 = new THREE.Vector3();
+        arucoMarkers[index].getWorldPosition(point_gt);
+        // console.log("SC2 1", point_gt)
+        arucoMarkers[index2].getWorldPosition(point_gt2);
+        // console.log("SC2 2", point_gt2)
+        wb1.x = (point_gt.x + point_gt2.x) /2;
+        wb1.y = (point_gt.y + point_gt2.y) /2;
+        wb1.z = (point_gt.z + point_gt2.z) /2;
+        screen2.position.set(wb1.x -1.75, wb1.y -2.25, wb1.z + 5.1 + 0.2)
+        sc2_plane.position.set(wb1.x, wb1.y, wb1.z)
+        sc2_plane.position.y += 0.1
+
+        screen2.visible = true;
+        
+    } catch (error) {
+        if (screen2){
+            screen2.visible = false;
+        }
+    }
+
 }
 
 function render_() {
@@ -1374,7 +1610,7 @@ function render_() {
 
     stats.update();
     
-    if (gui_controls.Course != "" && gui_controls.Date != "" && gui_controls.Semester != ""){
+    if (gui_controls.Classroom != "" && gui_controls.Date != "" && gui_controls.Semester != ""){
         params.isClassSelected = true;
     }
 
@@ -1424,158 +1660,10 @@ function render_() {
     //     frame_instructor_img.src = 'img/dummy.jpg';
     // }
 
-    var point_gt = new THREE.Vector3();
-    var point_gt2 = new THREE.Vector3();
     // front_wall.wall.position.y = -2.4
 
-    if (params.isNotSceneSetup){
-        tries += 1
-        if(tries >= 10){
-            params.isNotSceneSetup = false;
-        }
-        
-        try{
-
-            for (var i = 0; i < classData.length; i++) {    
-                arucoMap[classData[i]["id"]] = i;
-                arucoMarkers[i].visible = false
-            } 
-        }
-        catch(error){
-
-        }
-
-        try {
-            
-            // Podium 
-            var index = arucoMap[18]
-            var transSphere = classData[index]["translation"];
-            arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
-            arucoMarkers[index].getWorldPosition(point_gt);
-            podium.position.set(point_gt.x, point_gt.y, z_shift)
-
-            podium_plane.position.set(point_gt.x, point_gt.y, 0.6)
-            podium_plane.position.y += 0.3
-            // console.log("Podium", point_gt)
-        } catch (error) {
-            // podium.visible = false;
-        }
-
-        try {
-            // Whiteboard 1 
-            var index = arucoMap[10]
-            var transSphere = classData[index]["translation"];
-            arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
-            
-            var index2 = arucoMap[11]
-            var transSphere = classData[index2]["translation"];
-            arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
-            
-            var wb1 = new THREE.Vector3();
-            arucoMarkers[index].getWorldPosition(point_gt);
-            // console.log("WB1 1", point_gt)
-            arucoMarkers[index2].getWorldPosition(point_gt2);
-            // console.log("WB1 2", point_gt2)
-            wb1.x = (point_gt.x + point_gt2.x) /2;
-            wb1.y = (point_gt.y + point_gt2.y) /2;
-            wb1.z = (point_gt.z + point_gt2.z) /2;
-            whiteboard1.position.set(wb1.x, wb1.y, wb1.z - 1 + 0.3) 
-            var scale_x = (Math.abs(point_gt2.x - point_gt.x) + 0.5 ) / (6 * 100) 
-            var scale_y = (Math.abs(point_gt2.z - point_gt.z) + 0.5 ) / (1.5 * 100) 
-            whiteboard1.scale.set(scale_x, scale_y, 0.01)
-            wb1_plane.position.set(wb1.x, wb1.y, wb1.z)
-            wb1_plane.position.y += 0.1
-
-            
-        } catch (error) {
-            // whiteboard1.visible = false;
-        }
-        
-        try {
-            // Whiteboard 2
-            var index = arucoMap[12]
-            var transSphere = classData[index]["translation"];
-            arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
-            
-            var index2 = arucoMap[13]
-            var transSphere = classData[index2]["translation"];
-            arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
-            
-            var wb1 = new THREE.Vector3();
-            arucoMarkers[index].getWorldPosition(point_gt);
-            // console.log("WB2 1", point_gt)
-            arucoMarkers[index2].getWorldPosition(point_gt2);
-            // console.log("WB2 2", point_gt2)
-    
-            wb1.x = (point_gt.x + point_gt2.x) /2;
-            wb1.y = (point_gt.y + point_gt2.y) /2;
-            wb1.z = (point_gt.z + point_gt2.z) /2;
-            whiteboard2.position.set(wb1.x, wb1.y, wb1.z - 1 + 0.3)
-
-            var scale_x = (Math.abs(point_gt2.x - point_gt.x) + 0.5 ) / (6 * 100) 
-            var scale_y = (Math.abs(point_gt2.z - point_gt.z) + 0.5 ) / (1.5 * 100) 
-            whiteboard2.scale.set(scale_x, scale_y, 0.01)
-            wb2_plane.position.set(wb1.x, wb1.y, wb1.z)
-            wb2_plane.position.y += 0.1
-            
-            
-        } catch (error) {
-            // whiteboard2.visible = false;
-        }
-
-        try {
-            // Screen 1
-            var index = arucoMap[14]
-            var transSphere = classData[index]["translation"];
-            arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
-            
-            var index2 = arucoMap[15]
-            var transSphere = classData[index2]["translation"];
-            arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
-    
-            var wb1 = new THREE.Vector3();
-            arucoMarkers[index].getWorldPosition(point_gt);
-            // console.log("SC1 1", point_gt)
-            arucoMarkers[index2].getWorldPosition(point_gt2);
-            // console.log("SC1 2", point_gt2)
-            wb1.x = (point_gt.x + point_gt2.x) /2;
-            wb1.y = (point_gt.y + point_gt2.y) /2;
-            wb1.z = (point_gt.z + point_gt2.z) /2;
-            screen1.position.set(wb1.x -1.75, wb1.y -2.25, wb1.z + 5.1 + 0.2)            
-            sc1_plane.position.set(wb1.x, wb1.y, wb1.z)
-            sc1_plane.position.y += 0.1
-            
-        } catch (error) {
-            // screen1.visible = false;
-        }
-
-        try {
-            
-            // Screen 2
-            var index = arucoMap[16]
-            var transSphere = classData[index]["translation"];
-            arucoMarkers[index].position.set(transSphere.x, transSphere.y, transSphere.z);
-            
-            var index2 = arucoMap[17]
-            var transSphere = classData[index2]["translation"];
-            arucoMarkers[index2].position.set(transSphere.x, transSphere.y, transSphere.z);
-    
-            var wb1 = new THREE.Vector3();
-            arucoMarkers[index].getWorldPosition(point_gt);
-            // console.log("SC2 1", point_gt)
-            arucoMarkers[index2].getWorldPosition(point_gt2);
-            // console.log("SC2 2", point_gt2)
-            wb1.x = (point_gt.x + point_gt2.x) /2;
-            wb1.y = (point_gt.y + point_gt2.y) /2;
-            wb1.z = (point_gt.z + point_gt2.z) /2;
-            screen2.position.set(wb1.x -1.75, wb1.y -2.25, wb1.z + 5.1 + 0.2)
-            sc2_plane.position.set(wb1.x, wb1.y, wb1.z)
-            sc2_plane.position.y += 0.1
-
-            
-        } catch (error) {
-            // screen2.visible = false;
-        }
+    if (params.isNotSceneSetup){    
+        setupSceneObjects()
     }
 
     var distance = 0;

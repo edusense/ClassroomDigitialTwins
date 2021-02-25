@@ -18,6 +18,20 @@ class CameraModel {
 
     }
 
+    update_class(transformPath){
+        
+        $.ajax({
+            url: transformPath,
+            format: "json",
+            context: this,
+            success: function (data) {
+                this.hcam = data;
+                this.init()
+            }
+        });
+    }
+
+
     init() {
         let transBackCam = this.hcam["translation"]
         let quatBackCam = this.hcam["quat"]
@@ -88,6 +102,20 @@ class CameraModel1 {
 
     }
 
+    update_class(transformPath){
+        
+        $.ajax({
+            url: transformPath,
+            format: "json",
+            context: this,
+            success: function (data) {
+                this.hcam = data;
+                this.init()
+            }
+        });
+    }
+
+
     init() {
         let transBackCam = this.hcam["translation"]
         let quatBackCam = this.hcam["quat"]
@@ -157,6 +185,19 @@ class CameraModel2 {
         });
 
 
+    }
+
+    update_class(transformPath){
+        
+        $.ajax({
+            url: transformPath,
+            format: "json",
+            context: this,
+            success: function (data) {
+                this.hcam = data;
+                this.init()
+            }
+        });
     }
 
     init() {
@@ -239,6 +280,20 @@ class Wall {
 
     }
 
+    update_class(transformPath){
+        
+        $.ajax({
+            url: transformPath,
+            format: "json",
+            context: this,
+            success: function (data) {
+                this.hwall = data;
+                this.init()
+            }
+        });
+    }
+
+
     init() {
         let transWall = this.hwall["translation"]
         let quatWall = this.hwall["quat"]
@@ -287,6 +342,20 @@ class WallBack {
 
     }
 
+    update_class(transformPath){
+        
+        $.ajax({
+            url: transformPath,
+            format: "json",
+            context: this,
+            success: function (data) {
+                this.hwall = data;
+                this.init()
+            }
+        });
+    }
+
+
     init() {
         let transWall = this.hwall["translation"]
         let quatWall = this.hwall["quat"]
@@ -323,17 +392,51 @@ class WallNew {
         this.sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         this.sphere.visible = false
 
+        this.wall.position.set(10, 10, 0);
+        this.sphere.position.set(10, 10, 0);
+
         $.ajax({
             url: transformPath,
             format: "json",
             context: this,
             success: function (data) {
                 this.hwall = data;
-                this.init()
+                try {
+                    this.init()
+                    this.wall.visible = true;
+                    this.sphere.visible = true;
+                }
+                catch(err) {
+                    console.log(err)
+                    this.wall.visible = false;
+                    this.sphere.visible = false;
+                } 
             }
         });
 
 
+    }
+
+    update_class(transformPath){
+
+        $.ajax({
+            url: transformPath,
+            format: "json",
+            context: this,
+            success: function (data) {
+                this.hwall = data;
+                try {
+                    this.init()
+                    this.wall.visible = true;
+                    this.sphere.visible = true;
+                }
+                catch(err) {
+                    this.wall.visible = false;
+                    this.sphere.visible = false;
+                }             
+                
+            }
+        });
     }
 
     init() {
@@ -376,6 +479,8 @@ class WallNew {
             }
 
             if (data == undefined){
+                this.wall.position.set(10, 10, 0);
+                this.sphere.position.set(10, 10, 0);        
                 throw "Left wall not found";
             }
 
@@ -390,6 +495,8 @@ class WallNew {
                 }
             }
             if (data == undefined){
+                this.wall.position.set(10, 10, 0);
+                this.sphere.position.set(10, 10, 0);        
                 throw "Right wall not found";
             }
             this.wall.rotation.x = -Math.PI/2;
