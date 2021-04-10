@@ -150,11 +150,11 @@ function load_model_stl(){
         
         var cb = function (geometry) {
             
-            const material = new THREE.MeshPhongMaterial( { color: 0xFFF200, shininess: 100 } );
+            const material = new THREE.MeshPhongMaterial( { color: 0x0096FF, shininess: 40 } );
             const mesh = new THREE.Mesh( geometry, material );
 
             mesh.position.set( 0, 0, 0 );
-            mesh.scale.set( 0.0025, 0.0025, 0.0025 );
+            mesh.scale.set( 0.0025*1.25, 0.0025*1.25, 0.0025*1.25 );
 
             mesh.castShadow = true;
             mesh.receiveShadow = true;
