@@ -8,6 +8,7 @@ import { TWEEN} from './three/examples/jsm/libs/tween.module.min.js'
 import Stats from './three/examples/jsm/libs/stats.module.js';
 import { GUI } from './three/examples/jsm/libs/dat.gui.module.js';
 import { FBXLoader } from './three/examples/jsm/loaders/FBXLoader.js';
+import { STLLoader } from './three/examples/jsm/loaders/STLLoader.js';
 import { OrbitControls } from './three/examples/jsm/controls/OrbitControls.js';
 import { VRButton } from './three/examples/jsm/webxr/VRButton.js';
 
@@ -17,6 +18,7 @@ import { CameraModel, CameraModel1,  CameraModel2, Wall, WallBack, WallNew } fro
 
 var url = ""
 var modelPath = 'models/student_head.fbx';
+var model_path_stl = 'models/lego_head.stl';
 var frontCamTransformPath = url + "Hjsons/HCftoOg.json"
 var backCamTransformPath =  url + "Hjsons/HCbtoOg.json"
 var classScenePath = url + "Hjsons/back.json"
@@ -143,7 +145,32 @@ function loadModel() {
     });
 }
 
-loadModel().then(function (model) {
+function load_model_stl(){
+    return new Promise(function (resolve, reject) {
+        
+        var cb = function (geometry) {
+            
+            const material = new THREE.MeshPhongMaterial( { color: 0xFFF200, shininess: 100 } );
+            const mesh = new THREE.Mesh( geometry, material );
+
+            mesh.position.set( 0, 0, 0 );
+            mesh.scale.set( 0.0025, 0.0025, 0.0025 );
+
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+
+            resolve(mesh)
+            
+        }
+        
+        var loader = new STLLoader();
+        console.log("Here");
+
+        loader.load(model_path_stl, cb);
+    });
+}
+
+load_model_stl().then(function (model) {
     try{
         init(model);
     }
@@ -230,6 +257,10 @@ function init(dummyModel) {
     scene.add(inst_sphere)
     inst_sphere.visible = params.isClipping;
 
+
+    const light = new THREE.PointLight( 0xFFFFFF, 0.7, 100 );
+    light.position.set( 0, 0, 10 );
+    scene.add( light );
 
     // Plane
     var stud_frame_path = "frame_data/students/img_0.jpg";

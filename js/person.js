@@ -158,6 +158,8 @@ class Person {
         this.arrowHelper.position.y = pos.y;
         this.arrowHelper.position.z = pos.z;
 
+        this.model.position.y -= 0.1;
+
     }
     
     update_full_body(keypoints_3d, rvec){
@@ -403,6 +405,9 @@ class Person1 {
         this.arrowHelper.position.x = pos.x;
         this.arrowHelper.position.y = pos.y;
         this.arrowHelper.position.z = pos.z;
+
+        this.model.position.z -= 0.08;
+        this.model.position.y -= 0.05;
 
     }
     
