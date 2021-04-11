@@ -251,6 +251,10 @@ class Person1 {
     constructor(dummyModel) {
         this.model = dummyModel.clone();
         
+        this.model.scale.set( 0.0025*1.25, 0.0025*1.25, 0.0025*1.25 );
+
+        this.model.material = new THREE.MeshPhongMaterial( { color: 0x0096FF, shininess: 40 } );
+
         this.joints = [];
         this.skLines = [];
 
