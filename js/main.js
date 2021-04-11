@@ -287,7 +287,7 @@ function init(dummyModel) {
     inst_plane = new THREE.Mesh(geometry, material);
     inst_plane.visible = params.isInstHeatmap;
     inst_plane.position.y = 1;
-    inst_plane.position.z = 0.9;
+    inst_plane.position.z = 1;
     scene.add(inst_plane);
 
     setupScene()
@@ -705,11 +705,11 @@ function init(dummyModel) {
     // clippingFolder.add(gui_controls, 'Plane', -10, 10);
     // clippingFolder.closed = true;
 
-    // var AdvFolder = gui.addFolder('Advanced');
-    // AdvFolder.add(gui_controls, 'Inst Heatmap');
-    // AdvFolder.add(gui_controls, 'Student Heatmap');
-    // AdvFolder.add(gui_controls, 'Student Dwell Time');
-    // AdvFolder.closed = false;
+    var AdvFolder = gui.addFolder('Advanced');
+    AdvFolder.add(gui_controls, 'Inst Heatmap');
+    AdvFolder.add(gui_controls, 'Student Heatmap');
+    AdvFolder.add(gui_controls, 'Student Dwell Time');
+    AdvFolder.closed = false;
 
     document.addEventListener("keydown", onDocumentKeyDown, false);
 }
@@ -1477,7 +1477,7 @@ function setupSceneObjects(){
         arucoMarkers[index].getWorldPosition(point_gt);
         podium.position.set(point_gt.x, point_gt.y, z_shift)
 
-        podium_plane.position.set(point_gt.x, point_gt.y, 0.6)
+        podium_plane.position.set(point_gt.x, point_gt.y, z_shift+0.6)
         podium_plane.position.y += 0.3
         // console.log("Podium", point_gt)
         podium.visible = true;
@@ -1510,7 +1510,7 @@ function setupSceneObjects(){
         var scale_x = (Math.abs(point_gt2.x - point_gt.x) + 0.5 ) / (6 * 100) 
         var scale_y = (Math.abs(point_gt2.z - point_gt.z) + 0.5 ) / (1.5 * 100) 
         whiteboard1.scale.set(scale_x, scale_y, 0.01)
-        wb1_plane.position.set(wb1.x, wb1.y, wb1.z)
+        wb1_plane.position.set(wb1.x, wb1.y, wb1.z + 0.3)
         wb1_plane.position.y += 0.1
 
         whiteboard1.visible = true;
@@ -1545,7 +1545,7 @@ function setupSceneObjects(){
         var scale_x = (Math.abs(point_gt2.x - point_gt.x) + 0.5 ) / (6 * 100) 
         var scale_y = (Math.abs(point_gt2.z - point_gt.z) + 0.5 ) / (1.5 * 100) 
         whiteboard2.scale.set(scale_x, scale_y, 0.01)
-        wb2_plane.position.set(wb1.x, wb1.y, wb1.z)
+        wb2_plane.position.set(wb1.x, wb1.y, wb1.z +0.3)
         wb2_plane.position.y += 0.1
         
         whiteboard2.visible = true;
@@ -1575,7 +1575,7 @@ function setupSceneObjects(){
         wb1.y = (point_gt.y + point_gt2.y) /2;
         wb1.z = (point_gt.z + point_gt2.z) /2;
         screen1.position.set(wb1.x -1.75, wb1.y -2.25, wb1.z + 5.1 + 0.2)            
-        sc1_plane.position.set(wb1.x, wb1.y, wb1.z)
+        sc1_plane.position.set(wb1.x, wb1.y, wb1.z + 0.13)
         sc1_plane.position.y += 0.1
         screen1.visible = true;
         
@@ -1605,7 +1605,7 @@ function setupSceneObjects(){
         wb1.y = (point_gt.y + point_gt2.y) /2;
         wb1.z = (point_gt.z + point_gt2.z) /2;
         screen2.position.set(wb1.x -1.75, wb1.y -2.25, wb1.z + 5.1 + 0.2)
-        sc2_plane.position.set(wb1.x, wb1.y, wb1.z)
+        sc2_plane.position.set(wb1.x, wb1.y, wb1.z+ 0.13)
         sc2_plane.position.y += 0.1
 
         screen2.visible = true;
