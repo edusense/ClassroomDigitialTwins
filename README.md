@@ -10,6 +10,8 @@ python -m http.server 8080
 
 The code for 6 DOF gaze tracking is also integrated in the [EduSense Repo](https://github.com/edusense/edusense).
 
+More details can be found [here](https://www.edusense.io/digital-twins).
+
 ## Citation
 
 Karan Ahuja, Deval Shah, Sujeath Pareddy, Franceska Xhakaj, Amy Ogan, Yuvraj Agarwal, and Chris Harrison. 2021. Classroom Digital Twins with Instrumentation-Free Gaze Tracking. In Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems (CHI '21). Association for Computing Machinery, New York, NY, USA, Article 484, 1–9. DOI:https://doi.org/10.1145/3411764.3445711
