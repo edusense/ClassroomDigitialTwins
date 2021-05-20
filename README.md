@@ -25,7 +25,6 @@ Karan Ahuja, Deval Shah, Sujeath Pareddy, Franceska Xhakaj, Amy Ogan, Yuvraj Aga
 
 Download paper [here](https://karan-ahuja.com/assets/docs/paper/digitaltwin.pdf).
 
-Bibtext Reference:
 ```
 @inproceedings{10.1145/3411764.3445711,
 author = {Ahuja, Karan and Shah, Deval and Pareddy, Sujeath and Xhakaj, Franceska and Ogan, Amy and Agarwal, Yuvraj and Harrison, Chris},
